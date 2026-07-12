@@ -1,0 +1,59 @@
+apiVersion: kingdom.pal/v1alpha1
+kind: AgentManifest
+
+metadata:
+  id: orin
+  displayName: Orin
+  version: 0.1.0
+  description: Community intelligence and coordination for Kingdom of PAL.
+
+spec:
+  role: community-coordinator
+  tier: core
+  repository: https://github.com/promptalchemistlabs/pal-agent-orin
+  capabilities:
+    - community-question-analysis
+    - context-selection
+    - workflow-routing
+    - multi-agent-coordination
+  contracts:
+    version: v1alpha1
+    accepts:
+      - task-request
+    returns:
+      - task-result
+  permissions:
+    - read:community-knowledge
+    - read:shared-memory
+    - write:workflow-tasks
+    - write:shared-memory-summary
+  memory:
+    reads:
+      - founders-charter
+      - active-policies
+      - community-knowledge
+      - permitted-shared-memory
+      - referenced-workflow-state
+    writes:
+      - private-task-memory
+      - shared-memory-summary
+      - workflow-state
+  boundaries:
+    prohibited:
+      - Make major business decisions.
+      - Expose private community information.
+      - Publish or execute high-risk actions without approval.
+      - Share more context than another agent requires.
+      - Expand its own permissions.
+  approval:
+    policy: default-risk-policy
+    requiredFor:
+      - publish-content
+      - send-community-message
+      - change-workflow-configuration
+      - any-high-risk-action
+  healthcheck:
+    method: GET
+    path: /health
+  runtime:
+    status: planned
