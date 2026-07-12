@@ -8,7 +8,9 @@ multi-agent workflows.
 
 ## Status
 
-Contract scaffold only. The runtime is not implemented yet.
+Development runtime implemented with deterministic mock routing, a Telegram
+channel adapter, HTTP health/capability endpoints, and an optional OpenAI Agents
+SDK boundary. Mock mode is the default and does not require credentials.
 
 ## Core responsibilities
 
@@ -32,11 +34,35 @@ See [`agent.yaml`](agent.yaml) for the machine-readable contract and
 - Contracts: `promptalchemistlabs/sleeping-prince/shared-contracts/`
 - Workflow: `community-campaign`
 
+## Runtime contract
+
+Telegram is an adapter, not part of Orin's core contract. `POST
+/channels/telegram` normalises a Telegram update into the existing `v1alpha1`
+task request. Orin then creates a child task addressed to Scribe, Rick, or
+Bastion and returns a dashboard-ready workflow projection.
+
+Routes:
+
+- `GET /health`
+- `GET /capabilities`
+- `POST /tasks`
+- `POST /channels/telegram`
+
 ## Development
 
-The language, framework and runtime entrypoint are deliberately undecided. Add
-implementation code only after the kingdom contracts and runtime architecture
-are approved.
+All configuration resolves from the kingdom root `.env`; do not add an agent
+specific environment file.
+
+```sh
+cd agents/orin
+npm test
+npm start
+```
+
+The server defaults to deterministic `ORIN_MODE=mock` on port `4101`. Live mode
+must be assembled by the kingdom runtime with the official OpenAI Agents SDK
+and the boundary in `src/openai-boundary.mjs`; this package never reads an API
+key directly.
 
 ## Licence
 

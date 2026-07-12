@@ -4,7 +4,7 @@ kind: AgentManifest
 metadata:
   id: orin
   displayName: Orin
-  version: 0.1.0
+  version: 0.2.0
   description: Community intelligence and coordination for Kingdom of PAL.
 
 spec:
@@ -16,6 +16,7 @@ spec:
     - context-selection
     - workflow-routing
     - multi-agent-coordination
+    - telegram-channel-adapter
   contracts:
     version: v1alpha1
     accepts:
@@ -56,4 +57,7 @@ spec:
     method: GET
     path: /health
   runtime:
-    status: planned
+    status: development
+    language: javascript
+    framework: openai-agents-sdk-compatible
+    entrypoint: src/server.mjs
